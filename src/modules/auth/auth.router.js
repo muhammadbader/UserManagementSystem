@@ -3,21 +3,14 @@ import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import validation from "../../middleware/validation.js";
 import UserModel from "../../../DB/model/user.model.js";
 import { resigterSchema, loginSchema } from "./auth.valid.js";
 
 const router = Router();
 
-router.post("/register", async (req, res) => {
+router.post("/register", validation(resigterSchema), async (req, res) => {
   const { username, email, password } = req.body;
-  // Validate input
-  const result = resigterSchema.validate(
-    { username, email, password },
-    { abortEarly: true }
-  );
-  if (result.error) {
-    return res.status(400).json({ message: result.error.details[0].message });
-  }
 
   const hashedPassword = bcrypt.hashSync(password, 8);
 
@@ -36,16 +29,8 @@ router.post("/register", async (req, res) => {
   return res.status(201).json({ message: "User created successfully" });
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", validation(loginSchema), async (req, res) => {
   const { email, password } = req.body;
-  const result = loginSchema.validate(
-    { email, password },
-    { abortEarly: true }
-  );
-  if (result.error) {
-    return res.status(400).json({ message: result.error.details[0].message });
-  }
-
   const user = await UserModel.findOne({
     where: { email },
     attributes: ["username", "password"],
