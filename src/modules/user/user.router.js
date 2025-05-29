@@ -1,48 +1,53 @@
 import { Router } from "express";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import UserModel from "../../../DB/model/user.model.js";
 
+import UserModel from "../../../DB/model/user.model.js";
 
 const router = Router();
 
+const verifyToken = (req, res) => {
+  const { token } = req.headers;
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const decoded = jwt.verify(token, "muhammad bdeir");
+    req.user = decoded;
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
+
 router.get("/", async (req, res) => {
-  const users = await UserModel.findAll();
+  const users = await UserModel.findAll({
+    attributes: ["username", "password"],
+  });
+
+  verifyToken(req, res);
+
   return res
     .status(200)
     .json({ message: "Users fetched successfully", data: users });
 });
 
-router.post("/", async (req, res) => {
-  const { username, email, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 8);
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await UserModel.findByPk(id);
 
-  await UserModel.create({
-    username,
-    email,
-    password: hashedPassword,
-  });
+  verifyToken(req, res);
 
-  return res.status(201).json({ message: "User created successfully" });
-
-});
-
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const user = await UserModel.findOne({ where: { email } });
+  if (req.role != "admin") {
+    return res.status(403).json({ message: "Forbidden: Admins only" });
+  }
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
 
-  const isPasswordValid = bcrypt.compareSync(password, user.password);
-  if (!isPasswordValid) {
-    return res.status(401).json({ message: "Invalid password" });
-  }
-
-  // JWT token generation
-  const token = jwt.sign({ id: user._id, name: user.username }, "muhammad bdeir");
-  return res.status(200).json({ message: "Login successful" , token});
-})
+  await user.destroy();
+  return res.status(200).json({ message: "User deleted successfully" });
+});
 
 export default router;

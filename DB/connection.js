@@ -21,6 +21,7 @@ const sequelize = new Sequelize("UMS", "root", "", {
 
 export const connectDB = () => {
   sequelize.sync().then(() => {
+  // sequelize.sync({force: true}).then(() => {
     console.log("Database connection established.");
   }).catch((error) => {
     console.error("Unable to connect to the database:", error);

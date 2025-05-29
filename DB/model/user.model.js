@@ -30,6 +30,11 @@ const UserModel = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true, // Allow null for optional profile picture
   },
+  role: {
+    type: DataTypes.ENUM("user", "admin"),
+    defaultValue: "user", // Default role is 'user'
+    allowNull: false, // Ensure role is always set
+  },
 }, {
   timestamps: false, // Adds createdAt and updatedAt fields
 });
