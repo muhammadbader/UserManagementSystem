@@ -1,5 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import UserModel from "../../../DB/model/user.model.js";
 
 
@@ -39,7 +40,9 @@ router.post("/login", async (req, res) => {
     return res.status(401).json({ message: "Invalid password" });
   }
 
-  return res.status(200).json({ message: "Login successful" });
+  // JWT token generation
+  const token = jwt.sign({ id: user._id, name: user.username }, "muhammad bdeir");
+  return res.status(200).json({ message: "Login successful" , token});
 })
 
 export default router;
