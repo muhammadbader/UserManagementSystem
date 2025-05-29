@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
     return res.status(401).json({ message: "Invalid password" });
   }
 
-  return res.status(200).json({ message: "Login successful", user });
+  return res.status(200).json({ message: "Login successful" });
 })
 
 export default router;
