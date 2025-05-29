@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import validation from "../../middleware/validation.js";
 import UserModel from "../../../DB/model/user.model.js";
 import { resigterSchema, loginSchema } from "./auth.valid.js";
+import { sendEmail } from "../../utils/SendEmail.js";
 
 const router = Router();
 
@@ -25,6 +26,10 @@ router.post("/register", validation(resigterSchema), async (req, res) => {
     email,
     password: hashedPassword,
   });
+
+  sendEmail(email, "Welcome to Node 10 UMS", "Welcome to our platform!", "<b>Thank you for registering!</b>")
+    .then(() => console.log("Email sent successfully"))
+    .catch((error) => console.error("Error sending email:", error));
 
   return res.status(201).json({ message: "User created successfully" });
 });

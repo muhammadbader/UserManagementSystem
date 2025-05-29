@@ -6,6 +6,7 @@ import admin from "../../middleware/admin.js";
 
 const router = Router();
 
+// get all users
 router.get("/", auth(), async (req, res) => {
   const users = await UserModel.findAll({
     attributes: ["username", "password"],
@@ -16,6 +17,7 @@ router.get("/", auth(), async (req, res) => {
     .json({ message: "Users fetched successfully", data: users });
 });
 
+// delete a user by ID
 router.delete("/:id", auth(), admin(), async (req, res) => {
   const { id } = req.params;
   const user = await UserModel.findByPk(id);
