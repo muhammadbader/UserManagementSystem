@@ -1,25 +1,12 @@
 import { Router } from "express";
-import blogModel from "../../../DB/model/blog.model.js";
+import auth from "../../middleware/auth.middleware.js";
+import { get_all_blogs, create_new_blog } from "./blog.controller.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const blogs = await blogModel.findAll({});
-  return res.status(200).json({
-    message: "Blogs fetched successfully",
-    blogs,
-  });
-});
+router.get("/", get_all_blogs);
 
-router.post("/", async (req, res) => {
-  const { title, description } = req.body;
-  const blog = await blogModel.create({
-    title,
-    description,
-  });
-  return res.status(201).json({
-    message: "Blog created successfully", blog
-  });
-});
+// create new blog
+router.post("/", auth(), create_new_blog);
 
 export default router;

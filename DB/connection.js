@@ -20,9 +20,9 @@ const sequelize = new Sequelize("UMS", "root", "", {
 // testConnection();
 
 export const connectDB = () => {
-  // sequelize.sync().then(() => {
   sequelize
-    .sync({ force: true })
+    .sync()
+    // .sync({ force: true })
     .then(() => {
       console.log("Database connection established.");
     })

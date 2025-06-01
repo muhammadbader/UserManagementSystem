@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../connection.js";
+import UserModel from "./user.model.js"; // Assuming you have a User model defined
 
 const blogModel = sequelize.define(
   "Blog",
@@ -23,5 +24,10 @@ const blogModel = sequelize.define(
   },
 
 );
+
+// for relationships between tables (models)
+// UserModel has many blogs, blogModel belongs to UserModel
+UserModel.hasMany(blogModel)
+blogModel.belongsTo(UserModel)
 
 export default blogModel;
