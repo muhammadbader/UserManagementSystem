@@ -13,6 +13,14 @@ const initApp = (app, express) => {
   app.use("/users", userRouter);
   app.use("/auth", authRouter);
   app.use("/blogs", blogRouter);
+
+  // globla erorr handling
+  app.use((err, req, res, next) => {
+    res.status(err.statusCode).json({
+      message: err.message || "Something went wrong",
+      status: "error",
+    });
+  });
 };
 
 export default initApp;

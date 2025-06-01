@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 
 import { sendEmail } from "../../utils/SendEmail.js";
 import UserModel from "../../../DB/model/user.model.js";
+import AppError from "../../utils/AppError.js";
 
-const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
   const { username, email, password } = req.body;
 
   const hashedPassword = bcrypt.hashSync(password, 8);
@@ -12,7 +13,7 @@ const registerUser = async (req, res) => {
   // Check if user already exists
   const existingUser = await UserModel.findOne({ where: { email } });
   if (existingUser) {
-    return res.status(409).json({ message: "Email already exists" });
+    return next(new AppError("User already exists", 409));
   }
 
   const user = await UserModel.create({
@@ -50,7 +51,7 @@ const loginUser = async (req, res) => {
 
   const isPasswordValid = bcrypt.compareSync(password, user.password);
   if (!isPasswordValid) {
-    return res.status(401).json({ message: "Invalid password" });
+    return next(new AppError("Invalid password", 401));
   }
 
   // JWT token generatio

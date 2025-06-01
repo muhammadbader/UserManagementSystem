@@ -1,7 +1,7 @@
 import blogModel from "../../../DB/model/blog.model.js";
 import UserModel from "../../../DB/model/user.model.js";
 
-const get_all_blogs = async (req, res) => {
+const get_all_blogs = async (req, res, next) => {
   const blogs = await blogModel.findAll({
     attributes: ["id", "title", "description"], // Specify the attributes you want to return
     include: {
@@ -15,27 +15,24 @@ const get_all_blogs = async (req, res) => {
   });
 };
 
-const create_new_blog = async (req, res) => {
+const create_new_blog = async (req, res, next) => {
   const { title, description } = req.body;
   const { user } = req;
 
-  try {
-    const blog = await blogModel.create({
-      UserId: user.id, // Assuming you have user ID from auth middleware
-      title,
-      description,
-    });
-    // got it from auth middleware
-    return res.status(201).json({
-      message: "Blog created successfully",
-      blog,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Error creating blog",
-      error: error.message,
-    });
+  if (!user) {
+    return next(new AppError("User not found", 404));
   }
+
+  const blog = await blogModel.create({
+    UserId: user.id, // Assuming you have user ID from auth middleware
+    title,
+    description,
+  });
+  // got it from auth middleware
+  return res.status(201).json({
+    message: "Blog created successfully",
+    blog,
+  });
 };
 
 export { get_all_blogs, create_new_blog };

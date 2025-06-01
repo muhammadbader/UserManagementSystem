@@ -1,5 +1,6 @@
 import cloudinary from "../../utils/cloudinary.js";
 import UserModel from "../../../DB/model/user.model.js";
+import AppError from "../../utils/AppError.js";
 
 
 const getAllUsers = async (req, res) => {
@@ -12,28 +13,28 @@ const getAllUsers = async (req, res) => {
     .json({ message: "Users fetched successfully", data: users });
 };
 
-const deleteUserById = async (req, res) => {
+const deleteUserById = async (req, res, next) => {
   const { id } = req.params;
   const user = await UserModel.findByPk(id);
 
   if (req.role != "admin") {
-    return res.status(403).json({ message: "Forbidden: Admins only" });
+    return next(new AppError("Forbidden: Admins only", 403));
   }
 
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return next(new AppError("User not found", 404));
   }
 
   await user.destroy();
   return res.status(200).json({ message: "User deleted successfully" });
 };
 
-const uploadFileById = async (req, res) => {
+const uploadFileById = async (req, res, next) => {
   // first approach
   const { id } = req.params;
   const user = await UserModel.findByPk(id);
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return next(new AppError("User not found", 404));
   }
 
   // second approach: cloudinary
