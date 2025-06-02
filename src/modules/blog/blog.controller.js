@@ -35,4 +35,17 @@ const create_new_blog = async (req, res, next) => {
   });
 };
 
-export { get_all_blogs, create_new_blog };
+const getDetailsOfBlog = async (req, res, next) => {
+  const { id } = req.params;
+  const blog = await blogModel.findByPk(id);
+  if (!blog) {
+    return next(new AppError("Blog not found", 404));
+  }
+
+  return res.status(200).json({
+    message: "Blog details fetched successfully",
+    blog,
+  });
+}
+
+export { get_all_blogs, create_new_blog, getDetailsOfBlog };
