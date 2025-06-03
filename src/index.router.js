@@ -13,6 +13,12 @@ const initApp = (app, express) => {
   app.use(cors());
   app.use(express.json());
   // in case you got /user in the endpoint, redirect to userRouter
+  app.use("/", (req, res)=>{
+    res.status(200).json({
+      message: "Welcome to the API",
+      status: "success",
+    });
+  });
   app.use("/users", userRouter);
   app.use("/auth", authRouter);
   app.use("/blogs", blogRouter);
