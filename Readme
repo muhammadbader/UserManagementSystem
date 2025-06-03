@@ -1,1 +1,3 @@
 Using laragon as DB interface
+using render as web server
+using freedb as database server 
