@@ -16,6 +16,12 @@ const initApp = (app, express) => {
   app.use("/users", userRouter);
   app.use("/auth", authRouter);
   app.use("/blogs", blogRouter);
+  app.use("/health", (req, res) => {
+    res.status(200).json({
+      message: "Server is running",
+      status: "success",
+    });
+  });
 
   // globla erorr handling
   app.use((err, req, res, next) => {
