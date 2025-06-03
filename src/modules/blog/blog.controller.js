@@ -1,6 +1,8 @@
 import blogModel from "../../../DB/model/blog.model.js";
 import UserModel from "../../../DB/model/user.model.js";
 
+import AppError from "../../utils/AppError.js";
+
 const get_all_blogs = async (req, res, next) => {
   const blogs = await blogModel.findAll({
     attributes: ["id", "title", "description"], // Specify the attributes you want to return

@@ -40,6 +40,8 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log("Login attempt with email:", email);
+  
   const user = await UserModel.findOne({
     where: { email },
     attributes: ["id", "username", "password"],
