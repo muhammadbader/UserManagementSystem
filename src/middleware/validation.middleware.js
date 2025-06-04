@@ -1,6 +1,6 @@
 import AppError from "../utils/AppError.js";
 
-const validation = (schema, method = "body") => {
+const validation = (schema) => {
   return (req, res, next) => {
     const inputData = { ...req.body, ...req.params };
     const vals = schema.validate(inputData, {

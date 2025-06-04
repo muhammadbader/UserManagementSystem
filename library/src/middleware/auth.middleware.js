@@ -7,7 +7,7 @@ const auth = () => {
       return res.status(401).json({ message: "Unauthorized" });
     }
   
-      const decoded = jwt.verify(token, "muhammad bdeir");
+      const decoded = jwt.verify(token, "library muhammad");
       req.user = decoded;
       return next();
     

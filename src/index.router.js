@@ -1,8 +1,10 @@
+// index.router.js
 import { connectDB } from "../DB/connection.js";
 
 import authRouter from "./modules/auth/auth.router.js";
 import userRouter from "./modules/user/user.router.js";
 import blogRouter from "./modules/blog/blog.router.js";
+import libraryRouter from "../library/library.router.js";
 
 import cors from "cors";
 
@@ -16,6 +18,7 @@ const initApp = (app, express) => {
   app.use("/auth", authRouter);
   app.use("/users", userRouter);
   app.use("/blogs", blogRouter);
+  app.use("/library", libraryRouter);
 
   app.get("/health", (req, res) => {
     res.status(200).json({

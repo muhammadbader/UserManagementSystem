@@ -1,6 +1,5 @@
 import express from "express";
 import initApp from "./src/index.router.js";
-import { printRoutes } from "./src/printRoutes.js";
 
 const app = express();
 
@@ -25,6 +24,5 @@ app.listen(3000, () => {
   //   });
   // });
   
-  printRoutes(app);
 });
 
