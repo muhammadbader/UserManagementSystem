@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize";
 
 // Update these values with your actual database credentials
 // const sequelize = new Sequelize("freedb_umsproject_knowdledge", "freedb_muhammad1", "6tn@KR2Xs@w2!W$", {
-  const sequelize = new Sequelize("UMS", "root", "", {
+  const sequelize = new Sequelize("Library", "root", "", {
   // host: "sql.freedb.tech" ,// "localhost",
   // port: 3306, // default MySQL port, only for production use
   host: "localhost" ,

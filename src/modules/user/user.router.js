@@ -1,10 +1,10 @@
 import { Router } from "express";
+import { asyncHandler } from "../../utils/catchError.js";
 
 import auth from "../../middleware/auth.middleware.js";
 import admin from "../../middleware/admin.middleware.js";
 import fileUpload from "../../utils/multer.js";
 import { getAllUsers, deleteUserById, uploadFileById } from "./user.controller.js";
-import { asyncHandler } from "../../utils/catchError.js";
 
 const router = Router();
 
